@@ -30,6 +30,7 @@ public class Canvas {
     private PolygonRenderer pr;
     private SeedFiller sf;
     private SeedFillerPatern sfp;
+    private ScanLineFiller slf;
 
     private static final int YELLOW_COLOR = 0xffff00;
     private static final int RED_COLOR = 0xff0000;
@@ -60,6 +61,8 @@ public class Canvas {
         cr = new CircleRenderer(img);
         sfp = new SeedFillerPatern(img);
         sf = new SeedFiller(img);
+
+        slf = new ScanLineFiller(img);
 
         points = new ArrayList<>();
         lines = new ArrayList<>();
@@ -106,8 +109,9 @@ public class Canvas {
                 x1 = e.getX();
                 y1 = e.getY();
                 if (e.getButton() == MouseEvent.BUTTON3) {
-                    sfp.setBackColor(img.getRGB(x1, y1));
-                    sfp.seed(x1, y1);
+//                    sfp.setBackColor(img.getRGB(x1, y1));
+//                    sfp.seed(x1, y1);
+                    System.out.println("Line");
                 } else {
                     switch (imageType) {
                         case 0:
@@ -174,6 +178,8 @@ public class Canvas {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
+
+                    slf.draw(points);
 
                 } else {
                     clear();
