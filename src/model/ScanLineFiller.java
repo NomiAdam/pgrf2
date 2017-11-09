@@ -10,6 +10,8 @@ public class ScanLineFiller extends Renderer {
     private List<Edge> edges = new ArrayList<>();
     private List<Integer> intersections = new ArrayList<>();
 
+    //TODO Barva vyplne je jina než hranice
+
     public ScanLineFiller(BufferedImage img) {
         super(img);
     }
@@ -43,6 +45,7 @@ public class ScanLineFiller extends Renderer {
                 }
             }
 
+            //TODO make my own collection - bubble or better
             Collections.sort(intersections);
 
             LineRenderer line = new LineRenderer(img);
@@ -52,5 +55,7 @@ public class ScanLineFiller extends Renderer {
             }
             intersections.clear();
         }
+        PolygonRenderer poly = new PolygonRenderer(img);
+        poly.drawPolygon(p);
     }
 }

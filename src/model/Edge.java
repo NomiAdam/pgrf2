@@ -34,9 +34,45 @@ public class Edge {
         double k = dx / dy;
         double q = a.getX() - (k * a.getY());
 
-        int x = (int) (k * y + q);
+        int x = (int) Math.round((k * y + q) + 0.5);
 
         return x;
+    }
+
+    public boolean isInside(Point p) {
+        return false;
+    }
+
+    public Point intersection(Point p1, Point p2) {
+
+        double x1 = a.getX();
+        double x2 = b.getX();
+        double x3 = p1.getX();
+        double x4 = p2.getX();
+
+        double y1 = a.getY();
+        double y2 = a.getY();
+        double y3 = p1.getY();
+        double y4 = p2.getY();
+
+        double denum = ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
+        if (denum == 0)
+            return null;
+
+        double x = ((x1 * y2 - x2 * y1) * (x3 - x4) - (x3 * y4 - x4 * y3) * (x1 - x2)) / denum;
+        double y = ((x1 * y2 - x2 * y1) * (y3 - y4) - (x3 * y4 - x4 * y3) * (y1 - y2)) / denum;
+
+
+        //Kontrola jestli jsou paralelní takže se neprotínají takže mají stejnou směrnici
+        double d1 = (y2 - y1) / (x2 - x1);
+        double d2 = (y4 - y3) / (x4 - x3);
+        if (d1 == d2) return null;
+
+        if (Math.min(x1, x2) < x && x < Math.max(x1, x2) && Math.min(x3, x4) < x && x < Math.max(x3, x4)) {
+            Point prusecik = new Point((int) x, (int) y);
+            System.out.println("Prusečík je: " + x + " " + y);
+            return new Point((int) x, (int) y);
+        } else return null;
     }
 
 }

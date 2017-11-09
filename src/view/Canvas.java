@@ -64,6 +64,9 @@ public class Canvas {
 
         slf = new ScanLineFiller(img);
 
+        //TODO remove
+        CutTest cut = new CutTest(img);
+
         points = new ArrayList<>();
         lines = new ArrayList<>();
 
@@ -179,8 +182,9 @@ public class Canvas {
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
 
-                    slf.draw(points);
-
+                    //slf.draw(points);
+                    //cut.test(lines);
+                    cut.isInside(e.getX(), e.getY());
                 } else {
                     clear();
                     x2 = e.getX();
