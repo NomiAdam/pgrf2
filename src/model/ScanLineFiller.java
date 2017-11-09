@@ -45,8 +45,7 @@ public class ScanLineFiller extends Renderer {
                 }
             }
 
-            //TODO make my own collection - bubble or better
-            Collections.sort(intersections);
+            goodOldBubbleSort(intersections);
 
             LineRenderer line = new LineRenderer(img);
             for (int i = 0; i < intersections.size(); i += 2) {
@@ -57,5 +56,18 @@ public class ScanLineFiller extends Renderer {
         }
         PolygonRenderer poly = new PolygonRenderer(img);
         poly.drawPolygon(p);
+    }
+
+    public void goodOldBubbleSort(List<Integer> points) {
+        for (int i = 0; i < points.size() - 1; i++) {
+            for (int j = 0; j < points.size() - 1; j++) {
+                Integer a = points.get(j);
+                Integer b = points.get(j + 1);
+                if (a.compareTo(b) > 0) {
+                    points.set(j, b);
+                    points.set(j + 1, a);
+                }
+            }
+        }
     }
 }

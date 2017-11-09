@@ -40,7 +40,24 @@ public class Edge {
     }
 
     public boolean isInside(Point p) {
-        return false;
+        int x = (int) p.getX();
+        int y = (int) p.getY();
+
+        int x1 = (int) a.getX();
+        int x2 = (int) b.getX();
+        int y1 = (int) a.getY();
+        int y2 = (int) b.getY();
+
+        float A = x - x1; // position of point rel one end of line
+        float B = y - y1;
+        float C = x2 - x1; // vector along line
+        float D = y2 - y1;
+        float E = -D; // orthogonal vector
+        float F = C;
+
+        float dot = A * E + B * F;
+
+        return dot > 0;
     }
 
     public Point intersection(Point p1, Point p2) {

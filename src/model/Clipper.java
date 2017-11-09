@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Clipper extends Renderer {
-    private java.util.List<Point> clippingArea;
+    private List<Point> clippingArea;
 
-    public Clipper(BufferedImage img, List<Point> clippingArea) {
+    public Clipper(BufferedImage img) {
         super(img);
+    }
+
+    public void setClippingArea(List<Point> clippingArea) {
+        this.clippingArea = clippingArea;
     }
 
     public List<Point> clip(List<Point> polygonIn) {

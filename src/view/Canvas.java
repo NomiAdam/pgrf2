@@ -31,6 +31,7 @@ public class Canvas {
     private SeedFiller sf;
     private SeedFillerPatern sfp;
     private ScanLineFiller slf;
+    private Clipper clipper;
 
     private static final int YELLOW_COLOR = 0xffff00;
     private static final int RED_COLOR = 0xff0000;
@@ -63,9 +64,7 @@ public class Canvas {
         sf = new SeedFiller(img);
 
         slf = new ScanLineFiller(img);
-
-        //TODO remove
-        CutTest cut = new CutTest(img);
+        clipper = new Clipper(img);
 
         points = new ArrayList<>();
         lines = new ArrayList<>();
@@ -114,7 +113,6 @@ public class Canvas {
                 if (e.getButton() == MouseEvent.BUTTON3) {
 //                    sfp.setBackColor(img.getRGB(x1, y1));
 //                    sfp.seed(x1, y1);
-                    System.out.println("Line");
                 } else {
                     switch (imageType) {
                         case 0:
@@ -183,8 +181,11 @@ public class Canvas {
                 if (e.getButton() == MouseEvent.BUTTON3) {
 
                     //slf.draw(points);
-                    //cut.test(lines);
-                    cut.isInside(e.getX(), e.getY());
+                    Point p = new Point(e.getX(), e.getY());
+                    Point p1 = new Point(0, img.getHeight() / 2);
+                    Point p2 = new Point(img.getWidth(), img.getHeight() / 2);
+                    Edge edge = new Edge(p1, p2);
+                    System.out.println(edge.isInside(p));
                 } else {
                     clear();
                     x2 = e.getX();
