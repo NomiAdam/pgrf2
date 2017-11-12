@@ -33,7 +33,7 @@ public class ScanLineFiller extends Renderer {
             Edge edge = new Edge(a, b);
 
             if (!edge.isHorizontal()) {
-                edge = edge.getChangedDirectionIfNecessary();
+                edge.getChangedDirectionIfNecessary();
                 edges.add(edge);
             }
         }

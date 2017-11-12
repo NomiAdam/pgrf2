@@ -1,10 +1,11 @@
 package model;
 
 import java.awt.*;
+import java.util.List;
 
 public class Edge {
-    private final Point a;
-    private final Point b;
+    private Point a;
+    private Point b;
 
     public Edge(Point a, Point b) {
         this.a = a;
@@ -19,11 +20,11 @@ public class Edge {
         return (a.getY() <= y) && (b.getY() > y);
     }
 
-    public Edge getChangedDirectionIfNecessary() {
+    public void getChangedDirectionIfNecessary() {
         if (a.getY() > b.getY()) {
-            return new Edge(b, a);
-        } else {
-            return this;
+            Point pomoc = b;
+            b = a;
+            a = pomoc;
         }
     }
 
@@ -48,6 +49,8 @@ public class Edge {
         int y1 = (int) a.getY();
         int y2 = (int) b.getY();
 
+        //Zkontrolovat jestli je horizontal nevo vertical a pak prohodit nerovnost
+
         float A = x - x1; // position of point rel one end of line
         float B = y - y1;
         float C = x2 - x1; // vector along line
@@ -57,7 +60,8 @@ public class Edge {
 
         float dot = A * E + B * F;
 
-        return dot > 0;
+        //Dont change
+        return dot <= 0;
     }
 
     public Point intersection(Point p1, Point p2) {
@@ -68,7 +72,7 @@ public class Edge {
         double x4 = p2.getX();
 
         double y1 = a.getY();
-        double y2 = a.getY();
+        double y2 = b.getY();
         double y3 = p1.getY();
         double y4 = p2.getY();
 
@@ -85,11 +89,7 @@ public class Edge {
         double d2 = (y4 - y3) / (x4 - x3);
         if (d1 == d2) return null;
 
-        if (Math.min(x1, x2) < x && x < Math.max(x1, x2) && Math.min(x3, x4) < x && x < Math.max(x3, x4)) {
-            Point prusecik = new Point((int) x, (int) y);
-            System.out.println("Prusečík je: " + x + " " + y);
-            return new Point((int) x, (int) y);
-        } else return null;
+        return new Point((int) x, (int) y);
     }
-
 }
+

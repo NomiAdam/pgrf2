@@ -3,10 +3,7 @@ package view;
 import model.*;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +20,7 @@ import javax.swing.*;
 public class Canvas {
     private JFrame frame;
     private JPanel panel;
+    private ControllPanel ctrlPanel;
     private BufferedImage img;
 
     private LineRenderer lr;
@@ -55,6 +53,7 @@ public class Canvas {
         frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        ctrlPanel = new ControllPanel(120, height);
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         lr = new LineRenderer(img);
@@ -79,40 +78,18 @@ public class Canvas {
             }
         };
 
-        KeyAdapter key = new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_L) {
-                    imageType = 0;
-                    lines.clear();
-                } else if (e.getKeyCode() == KeyEvent.VK_P) {
-                    imageType = 1;
-                    points.clear();
-                } else if (e.getKeyCode() == KeyEvent.VK_C) {
-                    imageType = 2;
-                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    JOptionPane.showMessageDialog(
-                            frame,
-                            "Pro vykreslení kružnice:" +
-                                    "\nPo prvním kliku a následném tažení myši po plátně se začne vykreslovat kružnice s proměným poloměrem R." +
-                                    "\nPo druhém kliku a následném tažení myši po plátně se od místa kliku začne vykreslovat výseč kružnice",
-                            "Vykreslení kružnice",
-                            JOptionPane.INFORMATION_MESSAGE
-                    );
-                }
-                clear();
-                panel.repaint();
-            }
-        };
-
         MouseAdapter mouse = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 x1 = e.getX();
                 y1 = e.getY();
-                if (e.getButton() == MouseEvent.BUTTON3) {
-//                    sfp.setBackColor(img.getRGB(x1, y1));
-//                    sfp.seed(x1, y1);
+                if (e.getButton() == MouseEvent.BUTTON2) {
+                    if (ctrlPanel.getFilling()) {
+                        sfp.setBackColor(img.getRGB(x1, y1));
+                        sfp.seed(x1, y1);
+                    } else {
+                        slf.draw(points);
+                    }
                 } else {
                     switch (imageType) {
                         case 0:
@@ -136,7 +113,7 @@ public class Canvas {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
+                if (e.getButton() == MouseEvent.BUTTON2) {
 
                 } else {
                     clear();
@@ -180,12 +157,22 @@ public class Canvas {
             public void mouseReleased(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON3) {
 
-                    //slf.draw(points);
-                    Point p = new Point(e.getX(), e.getY());
-                    Point p1 = new Point(0, img.getHeight() / 2);
-                    Point p2 = new Point(img.getWidth(), img.getHeight() / 2);
-                    Edge edge = new Edge(p1, p2);
-                    System.out.println(edge.isInside(p));
+                    clear();
+                    //TODO REMOVE AFTER DONE
+                    List<Point> pointy = new ArrayList<>();
+                    pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 - 100));
+                    pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 + 100));
+                    pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 + 100));
+                    pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 - 100));
+
+                    clipper.setClippingArea(pointy);
+                    List<Point> clipped = clipper.clip(points);
+
+                    pr.drawPolygon(clipped);
+                    panel.repaint();
+
+                } else if (e.getButton() == MouseEvent.BUTTON2) {
+
                 } else {
                     clear();
                     x2 = e.getX();
@@ -216,14 +203,58 @@ public class Canvas {
             }
         };
 
+        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("P"), "polygon");
+        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("L"), "line");
+        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("C"), "circle");
+        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ENTER"), "hint");
+
+        panel.getActionMap().put("line", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imageType = 0;
+                lines.clear();
+                start();
+            }
+        });
+
+        panel.getActionMap().put("polygon", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imageType = 1;
+                points.clear();
+                start();
+            }
+        });
+
+        panel.getActionMap().put("circle", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imageType = 2;
+                start();
+            }
+        });
+
+        panel.getActionMap().put("hint", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(
+                        frame,
+                        "Pro vykreslení kružnice:" +
+                                "\nPo prvním kliku a následném tažení myši po plátně se začne vykreslovat kružnice s proměným poloměrem R." +
+                                "\nPo druhém kliku a následném tažení myši po plátně se od místa kliku začne vykreslovat výseč kružnice",
+                        "Vykreslení kružnice",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        });
+
         panel.addMouseListener(mouse);
         panel.addMouseMotionListener(mouse);
-
-        frame.addKeyListener(key);
 
         panel.setPreferredSize(new Dimension(width, height));
 
         frame.add(panel, BorderLayout.CENTER);
+        frame.add(ctrlPanel, BorderLayout.EAST);
         frame.pack();
         frame.setVisible(true);
     }
@@ -234,6 +265,13 @@ public class Canvas {
         gr.fillRect(0, 0, img.getWidth(), img.getHeight());
         gr.setColor(new Color(YELLOW_COLOR));
         gr.drawString("Press: L - for lines, P - for polygon, C - for circle (press ENTER for help)", 5, img.getHeight() - 5);
+        //TODO REMOVE
+        List<Point> pointy = new ArrayList<>();
+        pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 - 100));
+        pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 + 100));
+        pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 + 100));
+        pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 - 100));
+        pr.drawPolygon(pointy);
     }
 
     public void present(Graphics graphics) {
