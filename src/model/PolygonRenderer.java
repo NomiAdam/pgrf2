@@ -13,8 +13,6 @@ import java.util.List;
 public class PolygonRenderer extends Renderer {
     private LineRenderer lr;
 
-    //TODO dát sem arraylist a dát ho pryč z canvasu
-
     public PolygonRenderer(BufferedImage img) {
         super(img);
         lr = new LineRenderer(img);
