@@ -18,6 +18,10 @@ public class PolygonRenderer extends Renderer {
         lr = new LineRenderer(img);
     }
 
+    public void setColor(int color) {
+        lr.setColor(color);
+    }
+
     /**
      * Vykresleni polygonu pomoci kolekce bodu
      *

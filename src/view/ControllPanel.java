@@ -49,8 +49,8 @@ public class ControllPanel extends JPanel {
         btnHelp = new JButton("Nápověda");
 
         btnHelp.addActionListener(e ->
-            JOptionPane.showMessageDialog(this.getTopLevelAncestor(),"Pro vykreslení výplně stiskněte pravé tlačíko myši" +
-                    "\nPro ořezání polygonu stiskněte prostřední tlačítko myši","Nápověda",JOptionPane.INFORMATION_MESSAGE)
+            JOptionPane.showMessageDialog(this.getTopLevelAncestor(),"Pro vykreslení výplně stiskněte prostřední tlačíko myši" +
+                    "\nPro ořezání polygonu stiskněte pravé tlačítko myši","Nápověda",JOptionPane.INFORMATION_MESSAGE)
         );
 
         add(new JLabel("Typ výplně"));

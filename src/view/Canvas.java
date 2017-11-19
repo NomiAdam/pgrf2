@@ -34,6 +34,7 @@ public class Canvas {
     private static final int YELLOW_COLOR = 0xffff00;
     private static final int RED_COLOR = 0xff0000;
     private static final int GREEN_COLOR = 0x00ff00;
+    private static final int BLUE_COLOR = 0x0000ff;
     private static final int BACKGROUND_COLOR = 0x2f2f2f;
 
     private int x1;
@@ -46,6 +47,8 @@ public class Canvas {
     private List<Point> points;
     private List<Point> lines;
 
+    private ClipPolygonFactory clipPolygon;
+
     public Canvas(int width, int height) {
         frame = new JFrame();
 
@@ -56,6 +59,7 @@ public class Canvas {
 
         ctrlPanel = new ControllPanel(120, height);
         img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        clipPolygon = new ClipPolygonFactory(width, height);
 
         lr = new LineRenderer(img);
         pr = new PolygonRenderer(img);
@@ -96,9 +100,11 @@ public class Canvas {
                             sfp.seed(x1, y1);
                             break;
                         case 2:
-                            //TODO REAPIR BUG WITH DOUBLE CLICK
-                            slf.setColor(ctrlPanel.getSelectedColor());
-                            slf.draw(points);
+                            //TODO REPAIR BUG WITH DOUBLE CLICK
+                            if (points.size() != 0) {
+                                slf.setColor(ctrlPanel.getSelectedColor());
+                                slf.draw(points);
+                            }
                     }
                 } else {
                     switch (imageType) {
@@ -168,18 +174,10 @@ public class Canvas {
                 if (e.getButton() == MouseEvent.BUTTON3 && points.size() != 0) {
                     clear();
 
-                    //TODO REMOVE AFTER DONE
-                    List<Point> pointy = new ArrayList<>();
-                    pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 - 100));
-                    pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 + 100));
-                    pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 + 100));
-                    pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 - 100));
+                    clipper.setClippingArea(clipPolygon.getClippingPolygon());
+                    points = clipper.clip(points);
+                    pr.drawPolygon(points);
 
-                    clipper.setClippingArea(pointy);
-                    List<Point> clipped = clipper.clip(points);
-
-                    pr.drawPolygon(clipped);
-                    panel.repaint();
                 } else if (e.getButton() == MouseEvent.BUTTON2) {
 
                 } else {
@@ -221,7 +219,7 @@ public class Canvas {
             @Override
             public void actionPerformed(ActionEvent e) {
                 imageType = 0;
-                lines.clear();
+                lines = new ArrayList<>();
                 start();
             }
         });
@@ -230,7 +228,7 @@ public class Canvas {
             @Override
             public void actionPerformed(ActionEvent e) {
                 imageType = 1;
-                points.clear();
+                points = new ArrayList<>();
                 start();
             }
         });
@@ -275,13 +273,10 @@ public class Canvas {
         gr.setColor(new Color(YELLOW_COLOR));
         gr.drawString("Press: L - for lines, P - for polygon, C - for circle (press ENTER for help with circle)", 5, img.getHeight() - 5);
 
-        //TODO REMOVE
-        List<Point> pointy = new ArrayList<>();
-        pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 - 100));
-        pointy.add(new Point(img.getWidth() / 2 - 200, img.getHeight() / 2 + 100));
-        pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 + 100));
-        pointy.add(new Point(img.getWidth() / 2 + 200, img.getHeight() / 2 - 100));
-        pr.drawPolygon(pointy);
+        //TODO DO SOMETHING
+        pr.setColor(BLUE_COLOR);
+        pr.drawPolygon(clipPolygon.getClippingPolygon());
+        pr.setColor(YELLOW_COLOR);
     }
 
     public void present(Graphics graphics) {
