@@ -3,17 +3,25 @@ package model;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ScanLineFiller extends Renderer {
     private List<Edge> edges = new ArrayList<>();
     private List<Integer> intersections = new ArrayList<>();
-
-    //TODO Barva vyplne je jina než hranice
+    private int color;
 
     public ScanLineFiller(BufferedImage img) {
         super(img);
+        color = 0xffffff;
+    }
+
+    public ScanLineFiller(BufferedImage img, int color) {
+        super(img);
+        this.color = color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     public void draw(List<Point> p) {
@@ -49,7 +57,7 @@ public class ScanLineFiller extends Renderer {
 
             LineRenderer line = new LineRenderer(img);
             for (int i = 0; i < intersections.size(); i += 2) {
-                line.setColor(0xff0000);
+                line.setColor(color);
                 line.draw(intersections.get(i), intersections.get((i + 1) % intersections.size()), y, y);
             }
             intersections.clear();

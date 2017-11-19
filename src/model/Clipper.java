@@ -3,7 +3,6 @@ package model;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 public class Clipper extends Renderer {
@@ -32,7 +31,6 @@ public class Clipper extends Renderer {
             out.clear();
 
             Point v1 = input.get(input.size() - 1);
-
             for (Point v2 : input) {
                 if (edge.isInside(v2)) {
                     if (!edge.isInside(v1))
@@ -45,18 +43,6 @@ public class Clipper extends Renderer {
                 v1 = v2;
             }
         }
-
-//        List<Point> secondList = new ArrayList<>();
-//        for (int i = 0; i < out.size() - 1; i++) {
-//            int index = 0;
-//            for (Edge e : clippingEdges) {
-//                if (e.isInside(out.get(i)))
-//                    index++;
-//            }
-//            if (index == 4) secondList.add(out.get(i));
-//        }
-
-//        secondList = new ArrayList<Point>(new LinkedHashSet<Point>(secondList));
 
         return out;
     }
