@@ -1,4 +1,9 @@
-package model;
+package model.filler;
+
+import model.Edge;
+import model.Renderer;
+import model.render.LineRenderer;
+import model.render.PolygonRenderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -6,27 +11,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScanLineFiller extends Renderer {
-    private List<Edge> edges = new ArrayList<>();
-    private List<Integer> intersections = new ArrayList<>();
-    private int color;
+    private LineRenderer lr;
 
     public ScanLineFiller(BufferedImage img) {
         super(img);
-        color = 0xffffff;
+        lr = new LineRenderer(img);
+        lr.setColor(0xffffff);
     }
 
     public ScanLineFiller(BufferedImage img, int color) {
         super(img);
-        this.color = color;
+        lr = new LineRenderer(img);
+        lr.setColor(color);
     }
 
     public void setColor(int color) {
-        this.color = color;
+        lr.setColor(color);
     }
 
     public void draw(List<Point> p) {
         int yMax = (int) p.get(0).getY();
         int yMin = (int) p.get(0).getY();
+
+        List<Edge> edges = new ArrayList<>();
 
         for (int i = 0; i < p.size(); i++) {
             Point a = p.get(i);
@@ -46,6 +53,8 @@ public class ScanLineFiller extends Renderer {
             }
         }
 
+        List<Integer> intersections = new ArrayList<>();
+
         for (int y = yMin; y < yMax; y++) {
             for (Edge e : edges) {
                 if (e.isIntersection(y)) {
@@ -55,10 +64,8 @@ public class ScanLineFiller extends Renderer {
 
             goodOldBubbleSort(intersections);
 
-            LineRenderer line = new LineRenderer(img);
             for (int i = 0; i < intersections.size(); i += 2) {
-                line.setColor(color);
-                line.draw(intersections.get(i), intersections.get((i + 1) % intersections.size()), y, y);
+                lr.draw(intersections.get(i), intersections.get((i + 1) % intersections.size()), y, y);
             }
             intersections.clear();
         }

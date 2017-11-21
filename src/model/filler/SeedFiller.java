@@ -1,4 +1,6 @@
-package model;
+package model.filler;
+
+import model.Renderer;
 
 import java.awt.image.BufferedImage;
 

@@ -1,4 +1,7 @@
-package model;
+package model.clip;
+
+import model.Edge;
+import model.Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -1,6 +1,13 @@
 package view;
 
-import model.*;
+import model.clip.ClipPolygonFactory;
+import model.clip.Clipper;
+import model.filler.ScanLineFiller;
+import model.filler.SeedFiller;
+import model.filler.SeedFillerPatern;
+import model.render.CircleRenderer;
+import model.render.LineRenderer;
+import model.render.PolygonRenderer;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -100,7 +107,6 @@ public class Canvas {
                             sfp.seed(x1, y1);
                             break;
                         case 2:
-                            //TODO REPAIR BUG WITH DOUBLE CLICK
                             if (points.size() != 0) {
                                 slf.setColor(ctrlPanel.getSelectedColor());
                                 slf.draw(points);
@@ -219,7 +225,7 @@ public class Canvas {
             @Override
             public void actionPerformed(ActionEvent e) {
                 imageType = 0;
-                lines = new ArrayList<>();
+                lines.clear();
                 start();
             }
         });
@@ -228,7 +234,7 @@ public class Canvas {
             @Override
             public void actionPerformed(ActionEvent e) {
                 imageType = 1;
-                points = new ArrayList<>();
+                points.clear();
                 start();
             }
         });
@@ -273,7 +279,7 @@ public class Canvas {
         gr.setColor(new Color(YELLOW_COLOR));
         gr.drawString("Press: L - for lines, P - for polygon, C - for circle (press ENTER for help with circle)", 5, img.getHeight() - 5);
 
-        //TODO DO SOMETHING
+        //HARDCODED Clip Polygon using ClipPolygonFactory class
         pr.setColor(BLUE_COLOR);
         pr.drawPolygon(clipPolygon.getClippingPolygon());
         pr.setColor(YELLOW_COLOR);
