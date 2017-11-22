@@ -15,6 +15,7 @@ public class ControllPanel extends JPanel {
     public ControllPanel(int width, int height) {
         setPreferredSize(new Dimension(width, height));
         setLayout(new GridLayout(0, 1));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         selectedColor = RED;
 
@@ -49,8 +50,8 @@ public class ControllPanel extends JPanel {
         btnHelp = new JButton("Nápověda");
 
         btnHelp.addActionListener(e ->
-            JOptionPane.showMessageDialog(this.getTopLevelAncestor(),"Pro vykreslení výplně stiskněte prostřední tlačíko myši" +
-                    "\nPro ořezání polygonu stiskněte pravé tlačítko myši","Nápověda",JOptionPane.INFORMATION_MESSAGE)
+                JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Pro vykreslení výplně stiskněte prostřední tlačíko myši" +
+                        "\nPro ořezání polygonu stiskněte pravé tlačítko myši", "Nápověda", JOptionPane.INFORMATION_MESSAGE)
         );
 
         add(new JLabel("Typ výplně"));
