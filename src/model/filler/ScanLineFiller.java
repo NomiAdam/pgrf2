@@ -1,7 +1,7 @@
 package model.filler;
 
-import model.Edge;
-import model.Renderer;
+import model.helper.Edge;
+import model.helper.Renderer;
 import model.render.LineRenderer;
 import model.render.PolygonRenderer;
 

@@ -1,7 +1,6 @@
 package model.render;
 
-import model.Renderer;
-import model.render.LineRenderer;
+import model.helper.Renderer;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

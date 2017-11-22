@@ -1,4 +1,4 @@
-package model;
+package model.helper;
 
 import java.awt.*;
 
@@ -38,7 +38,7 @@ public class Edge {
     }
 
     /**
-     * Metoda pro bodu x
+     * Metoda pro vypocet bodu x
      *
      * @param y
      * @return
@@ -70,14 +70,7 @@ public class Edge {
         int y1 = (int) a.getY();
         int y2 = (int) b.getY();
 
-        float A = x - x1; // position of point rel one end of line
-        float B = y - y1;
-        float C = x2 - x1; // vector along line
-        float D = y2 - y1;
-        float E = -D; // orthogonal vector
-        float F = C;
-
-        float dot = A * E + B * F;
+        float dot = (x - x1) * (y1 - y2) + (y - y1) * (x2 - x1);
 
         return dot <= 0;
     }
