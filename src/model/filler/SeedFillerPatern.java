@@ -4,11 +4,18 @@ import model.Renderer;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Trida pro vyplneni oblasti vzorem
+ *
+ * @author Adam Kvasnicka
+ * @version 2017
+ */
 public class SeedFillerPatern extends Renderer {
     private static final int color_one = 0xffff00;
     private static final int color_two = 0xff00ff;
     private int background;
 
+    //Matice predstavujici vzor
     private int[][] pattern = {
             {0, 0, 0, 0},
             {0, 1, 1, 0},

@@ -4,6 +4,12 @@ import model.Renderer;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Trida po vyplneni oblasti pomoci Seminkoveho algoritmu
+ *
+ * @author Adam Kvasnicka
+ * @version 2017
+ */
 public class SeedFiller extends Renderer {
     private int color;
     private int background;
@@ -25,6 +31,12 @@ public class SeedFiller extends Renderer {
         this.color = color;
     }
 
+    /**
+     * Metoda pro vyplneni oblasti rekurzivni cestou
+     *
+     * @param x bod x pocatecniho seminka
+     * @param y bod y pocatecniho seminka
+     */
     public void seed(int x, int y) {
         if (x >= 0 && y >= 0 && x < img.getWidth() && y < img.getHeight()) {
             if (img.getRGB(x, y) == background && img.getRGB(x, y) != color) {

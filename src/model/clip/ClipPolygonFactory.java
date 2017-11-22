@@ -4,6 +4,12 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Trida pro vytvoreni orezavaciho polygonu
+ *
+ * @author Adam Kvasnicka
+ * @version 2017
+ */
 public class ClipPolygonFactory {
     private List<Point> polygon;
 

@@ -10,6 +10,12 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Trida pro vyplneni polygonu pomoci algoritmu Scan-Line
+ *
+ * @author Adam Kvasnicka
+ * @version 2017
+ */
 public class ScanLineFiller extends Renderer {
     private LineRenderer lr;
 
@@ -29,6 +35,11 @@ public class ScanLineFiller extends Renderer {
         lr.setColor(color);
     }
 
+    /**
+     * Metoda pro vyplneni polygonu pomoci algoritmu Scan-Line
+     *
+     * @param p vstupni polygon ktery budeme vyplnovat
+     */
     public void draw(List<Point> p) {
         int yMax = (int) p.get(0).getY();
         int yMin = (int) p.get(0).getY();
@@ -47,6 +58,7 @@ public class ScanLineFiller extends Renderer {
 
             Edge edge = new Edge(a, b);
 
+            //Kontrola jestli hrana neni horizontalni, pokud ano vynecháme
             if (!edge.isHorizontal()) {
                 edge.getChangedDirectionIfNecessary();
                 edges.add(edge);
@@ -62,6 +74,7 @@ public class ScanLineFiller extends Renderer {
                 }
             }
 
+            //Setrizeni bodu
             goodOldBubbleSort(intersections);
 
             for (int i = 0; i < intersections.size(); i += 2) {

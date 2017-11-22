@@ -1,8 +1,13 @@
 package model;
 
 import java.awt.*;
-import java.util.List;
 
+/**
+ * Pomocna trida definujici hranu
+ *
+ * @author Adam Kvasnicka
+ * @version 2017
+ */
 public class Edge {
     private Point a;
     private Point b;
@@ -20,7 +25,11 @@ public class Edge {
         return (a.getY() <= y) && (b.getY() > y);
     }
 
+    /**
+     * Metoda pro kontrolu orientace
+     */
     public void getChangedDirectionIfNecessary() {
+        //V pripade potreby zmena orientace hrany
         if (a.getY() > b.getY()) {
             Point pomoc = b;
             b = a;
@@ -28,6 +37,12 @@ public class Edge {
         }
     }
 
+    /**
+     * Metoda pro bodu x
+     *
+     * @param y
+     * @return
+     */
     public int getIntersection(int y) {
         double dx = b.getX() - a.getX();
         double dy = b.getY() - a.getY();
@@ -40,6 +55,12 @@ public class Edge {
         return x;
     }
 
+    /**
+     * Metoda pro zjisteni zdali se bod nachazi uvnitr hrany
+     *
+     * @param p
+     * @return
+     */
     public boolean isInside(Point p) {
         int x = (int) p.getX();
         int y = (int) p.getY();
@@ -48,8 +69,6 @@ public class Edge {
         int x2 = (int) b.getX();
         int y1 = (int) a.getY();
         int y2 = (int) b.getY();
-
-        //Zkontrolovat jestli je horizontal nevo vertical a pak prohodit nerovnost
 
         float A = x - x1; // position of point rel one end of line
         float B = y - y1;
@@ -60,10 +79,16 @@ public class Edge {
 
         float dot = A * E + B * F;
 
-        //Dont change
         return dot <= 0;
     }
 
+    /**
+     * Metoda pro pro vypocet pruseciku
+     *
+     * @param p1 prvni bod primky
+     * @param p2 druhy bod primky
+     * @return
+     */
     public Point intersection(Point p1, Point p2) {
 
         double x1 = a.getX();
@@ -82,12 +107,6 @@ public class Edge {
 
         double x = ((x1 * y2 - x2 * y1) * (x3 - x4) - (x3 * y4 - x4 * y3) * (x1 - x2)) / denum;
         double y = ((x1 * y2 - x2 * y1) * (y3 - y4) - (x3 * y4 - x4 * y3) * (y1 - y2)) / denum;
-
-
-        //Kontrola jestli jsou paralelní takže se neprotínají takže mají stejnou směrnici
-        double d1 = (y2 - y1) / (x2 - x1);
-        double d2 = (y4 - y3) / (x4 - x3);
-        if (d1 == d2) return null;
 
         return new Point((int) x, (int) y);
     }
